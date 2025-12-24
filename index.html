@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: auto;
+      padding: auto;
+      background: #1c1c1c;
+      color: white;
+      perspective: 800px;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      /* vertical stacking */
+      align-items: center;
+      /* center everything */
+      gap: 10px;
+    }
+
+    .outer {
+      display: flex;
+      flex-wrap: wrap;
+      /* allow boxes to go to next row */
+      width: 330px;
+      /* 100*3 + 15gap*2 = 330 */
+      gap: 15px;
+    }
+
+    .box {
+      width: 100px;
+      height: 100px;
+      border-radius: 10px;
+      background-color: skyblue;
+      transition: transform 0.5s, background-color 0.5s;
+      transform-style: preserve-3d;
+      cursor: pointer;
+      text-align: center;
+      align-content: center;
+      font-size: 22px;
+    }
+
+    p {
+      text-align: center;
+      font-size: 22px;
+    }
+
+    button {
+      padding: 5px 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      background-color: green;
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <div class="outer">
+      <div class="box" id="1"></div>
+      <div class="box" id="2"></div>
+      <div class="box" id="3"></div>
+      <div class="box" id="4"></div>
+      <div class="box" id="5"></div>
+      <div class="box" id="6"></div>
+      <div class="box" id="7"></div>
+      <div class="box" id="8"></div>
+      <div class="box" id="9"></div>
+      <div class="box" id="10"></div>
+      <div class="box" id="11"></div>
+      <div class="box" id="12"></div>
+    </div>
+    <p>Attempts: 0</p>
+    <button onclick="location.reload()">Reset / Play Again</button>
+  </div>
+
+  <script>
+    let values = ["X", "X", "X", "X", "X", "X", "X", "X", "X", "X", "X", "O",];
+
+    // Shuffle values array
+    values.sort(() => Math.random() - 0.5);
+
+    const boxes = document.querySelectorAll(".box");
+    // Assign to each div
+    boxes.forEach((box, index) => {
+      box.setAttribute("data-value", values[index]);
+    });
+
+    let attempts = 0;
+    document.addEventListener('click', (event) => {
+      if (!event.target.classList.contains('box')) return;
+
+      console.log("Box ID clicked:", event.target.id);
+      const setValue = event.target.dataset.value;  // each div has its own reveal color
+      console.log("Clicked div reveals:", setValue);
+      event.target.textContent = setValue;
+      event.target.style.pointerEvents = 'none'; // disable further clicks
+
+      if (setValue == "O") {
+        attempts++;
+        event.target.style.color = 'darkgreen';
+        let para = document.querySelector('p');
+        para.textContent = `You Found it! Attempts: ${attempts}`;
+        document.querySelector('.outer').style.pointerEvents = 'none';
+        console.log("You Found it!");
+      } else {
+        attempts++;
+        event.target.style.color = 'red';
+        let para = document.querySelector('p');
+        para.textContent = `Attempts: ${attempts}`;
+        console.log("Different value clicked:", setValue);
+      }
+    });
+
+  </script>
+
+
+</body>
+
+</html>
